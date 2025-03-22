@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:game_counter/controllers/game_controller.dart';
 import 'package:game_counter/controllers/navigation_controller.dart';
 import 'package:game_counter/shared/custom_snack_bar.dart';
-import 'package:game_counter/theme.dart';
 import 'package:get/get.dart';
 
 import '../models/team_model.dart';

@@ -41,11 +41,11 @@ class NavigationComponent extends StatelessWidget {
           currentIndex: controller.selectedIndex.value,
 
           onTap: (index) {
-            // if (index == 1 && gameController.game.value == null) {
-            //   Get.bottomSheet(StartGameModal());
-            // } else {
+            if (index == 1 && gameController.game.value == null) {
+              Get.bottomSheet(StartGameModal());
+            } else {
               controller.changePage(index);
-            // }
+            }
           },
         ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
