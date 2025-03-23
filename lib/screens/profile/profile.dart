@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:game_counter/controllers/theme_controller.dart';
+import 'package:game_counter/screens/profile/theme_customization.dart';
+import 'package:get/get.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -27,6 +30,9 @@ class _ProfileState extends State<Profile> {
   
   // Display name controller
   final TextEditingController _nameController = TextEditingController(text: 'John');
+
+  // Get the theme controller
+  final ThemeController themeController = Get.find<ThemeController>();
 
   @override
   void dispose() {
@@ -346,37 +352,42 @@ class _ProfileState extends State<Profile> {
               'Appearance',
               Icons.palette_outlined,
               [
-                _buildSwitchItem(
-                  'Use System Theme',
-                  'Automatically match your device theme',
-                  _useSystemTheme,
-                  (value) {
-                    setState(() {
-                      _useSystemTheme = value;
-                    });
-                  },
-                  context,
-                ),
-                if (!_useSystemTheme)
-                  _buildSwitchItem(
-                    'Dark Mode',
-                    'Use dark theme throughout the app',
-                    _isDarkMode,
+                GetBuilder<ThemeController>(
+                  builder: (controller) => _buildSwitchItem(
+                    'Use System Theme',
+                    'Automatically match your device theme',
+                    controller.themeMode == ThemeMode.system,
                     (value) {
-                      setState(() {
-                        _isDarkMode = value;
-                        // Here you would trigger a theme change in your app
-                        // Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
-                      });
+                      controller.setThemeMode(value ? ThemeMode.system : 
+                        (_isDarkMode ? ThemeMode.dark : ThemeMode.light));
+                      setState(() => _useSystemTheme = value);
                     },
                     context,
                   ),
+                ),
+                
+                if (!_useSystemTheme)
+                  GetBuilder<ThemeController>(
+                    builder: (controller) => _buildSwitchItem(
+                      'Dark Mode',
+                      'Use dark theme throughout the app',
+                      controller.themeMode == ThemeMode.dark,
+                      (value) {
+                        controller.setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                        setState(() => _isDarkMode = value);
+                      },
+                      context,
+                    ),
+                  ),
+                
                 const SizedBox(height: 8),
-                OutlinedButton(
+                
+                OutlinedButton.icon(
                   onPressed: () {
-                    // Navigate to theme customization page
+                    Get.to(() => ThemeCustomizationScreen());
                   },
-                  child: const Text('Customize Colors'),
+                  icon: const Icon(Icons.color_lens),
+                  label: const Text('Customize Colors'),
                   style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
